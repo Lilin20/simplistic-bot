@@ -1,7 +1,7 @@
 ![GitHub Logo](https://cdn.discordapp.com/attachments/807226989223608401/889169583993409576/Unbenannt-1.png)
 <br>
 # Was ist Simplistic?
-Simplistic ist ein Discord-Bot der sich hauptsächlich um die Verwaltung von schulinternen Daten kümmert. Dennoch kann man den Bot beliebib erweitern. Simplistic beinhaltet nicht nur ein Schulverwaltungssystem sondern zum Beispiel auch eine Funktion für das senden von Memes. Alle schulinternen Daten werden in einer Datenbank gespeichert damit diese immer abrufbar sind. Ebenso besitzt Simplistic eine App für Android-Smartphones. Mit dieser App kann jeder seine Hausaufgaben einsehen oder sogar Neuigkeiten sehen.
+Simplistic ist ein Discord-Bot der sich hauptsächlich um die Verwaltung von schulinternen Daten kümmert. Dennoch kann man den Bot beliebig erweitern. Simplistic beinhaltet nicht nur ein Schulverwaltungssystem sondern zum Beispiel auch eine Funktion für das senden von Memes. Alle schulinternen Daten werden in einer Datenbank gespeichert damit diese immer abrufbar sind. Ebenso besitzt Simplistic eine App für Android-Smartphones. Mit dieser App kann jeder seine Hausaufgaben einsehen oder sogar Neuigkeiten sehen.
 <br>
 <br>
 
