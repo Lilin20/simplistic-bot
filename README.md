@@ -11,6 +11,18 @@ Simplistic wurde im Rahmen eines Projektes von 4 Schülern entwickelt. Da die de
 # Das Team
 Das Team wurde wärend der Entwicklung in 2 Teams unterteilt. Das eine Team sorgt für die Entwicklung des Bots und das andere Team ist für die Entwicklung der App verantwortlich.
 
+### Marvin G.
+Marvin war für die programmierung des Bots zuständig. Durch Ihn konnten wir das Drohnenskript von Python 2.7 auf Python 3.9 umschreiben.
+
+### Mirco L.
+Mirco war für den Bot zuständig. Er programmierte das Profilmodul sowie das Schulmodul. Dank Ihm konnten wir eine neue Datenbanklösung verwenden.
+
+### Kevin D.
+Kevin war, im großen und ganzen, für die Backend-Programmierung der App zuständig. Er hat die App, so wie sie heute aussieht, designed und hat die Verbindung mit Datenbanken eingebaut.
+
+### Justin S.
+Justin war für den Kartei-/Informationsbereich der App verantwortlich. Außerdem hat er die Sqlite3 Datenbank aufgesetzt und die Projektdokumentation sowie Präsentation verwaltet.
+
 # Benötigte Pakete
 Das Projekt basiert auf der Programmiersprache "Python". Im laufe des Projektes wurden Bibliotheken installiert die standardgemäß nicht installiert sind. Für die eigene inbetriebname des Bots werden folgende Pakete benötigt:
 
