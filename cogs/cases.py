@@ -34,6 +34,11 @@ class Cases(commands.Cog):
         db.database.execute(f"SELECT inventory_slot_one, inventory_slot_two, inventory_slot_three FROM userdata WHERE d_id = {user.id}")
         result = db.database.fetchall()
         print(result)
+        embedVar = discord.Embed(title='Inventory', description=f'Inventory von {user.mention}', color=discord.Colour.blue())
+        embedVar.add_field(name='Slot 1', value=f'{result[0][0]}')
+        embedVar.add_field(name='Slot 2', value=f'{result[0][1]}')
+        embedVar.add_field(name='Slot 3', value=f'{result[0][2]}')
+        await ctx.send(embed=embedVar)
 
 
    
