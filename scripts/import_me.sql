@@ -18,6 +18,9 @@ CREATE TABLE userdata(
    robbed_success INT DEFAULT 0,
    robbed_fail INT DEFAULT 0,
    worked_hours INT DEFAULT 0,
+   inventory_slot_one VARCHAR(255) DEFAULT "Leer",
+   inventory_slot_two VARCHAR(255) DEFAULT "Leer",
+   inventory_slot_three VARCHAR(255) DEFAULT "Leer",
    PRIMARY KEY(uid)
 );
 
