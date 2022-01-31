@@ -94,13 +94,16 @@ class Casino(commands.Cog):
         current_money = result[0][7]
         if current_money < bet:
             await ctx.send("Du hast nicht genug Geld um ein Spiel 'Roulette' zu spielen.")
+            return
         if bet <=0:
             await ctx.send("Zu wenig oder gar kein Einsatz eingegeben.")
+            return
         if bet >150:
             await ctx.send("Der maximale Einsatz beträgt 150.")
             return
         if len(args) <= 0:
             await ctx.send("Bitte wähle die Felder aus auf denen du Chips platzieren willst (4 Felder max.)")
+            return
         if len(args) >= 5:
             await ctx.send("Bitte lege deine Chips nur auf 4 Felder.")
             return
