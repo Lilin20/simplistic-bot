@@ -27,6 +27,18 @@ class Cases(commands.Cog):
     async def on_ready(self):
         print("Cases module loaded.")
 
+    '''@commands.Cog.listener()
+    @commands.has_any_role("Klassenmanagement", "Verwalter")
+    async def on_message(self, message):
+        # Die Chance das ein User eine Case bekommt beträgt 5% pro Nachricht
+        if random.randint(1, 100) <= 10:
+            db.database.execute(f"UPDATE userdata SET cases = cases + 1 WHERE d_id = {message.author.id}")
+            #Embed that shows the user that he got a case
+            embed = discord.Embed(title="Simplistic - Cases", description="Du hast eine Case erhalten!", color=0x00ff00)
+            embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
+            embed.set_footer(text="Schlüssel können im Keyshop erworben werden.")
+            await message.channel.send(embed=embed)'''
+
     @commands.command()
     @commands.has_any_role("Klassenmanagement", "Verwalter")
     async def inventory(self, ctx):

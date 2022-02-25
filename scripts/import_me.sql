@@ -57,7 +57,50 @@ CREATE TABLE warns(
 CREATE TABLE economy_variables(
     lottery_pot INT
 );
-	
+
+CREATE TABLE case_items(
+	item_id INT PRIMARY KEY AUTO_INCREMENT,
+	item_name VARCHAR(255),
+	item_description VARCHAR(255),
+	item_price INT,
+	item_type VARCHAR(255),
+	item_rarity INT
+);
+
+INSERT INTO case_items(
+	item_name,
+	item_description,
+	item_price,
+	item_type,
+	item_rarity
+) VALUES (
+	"Random Money Drop - Solo",
+	"Entweder der Schlüssel ist wieder drin oder nicht.",
+	"100",
+	"Money Drop",
+	"1"
+),
+(
+	"Messer",
+	"Dieses Messer erhöht die Wahrscheinlichkeit jemanden auszurauben."
+	"100",
+	"Weapon",
+	"2"
+),
+(
+	"Taser",
+	"Dieser Taser schützt dich davor ausgeraubt zu werden.",
+	"100",
+	"Weapon",
+	"2"
+),
+(
+	"Random Money Drop - Everyone",
+	"Jeder kriegt Geld!",
+	"100",
+	"Money Drop",
+	"5"
+);
 	
 DROP USER IF EXISTS 'bot_db_admin'@'%';
 FLUSH PRIVILEGES;

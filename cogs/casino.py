@@ -31,6 +31,12 @@ class Casino(commands.Cog):
     @commands.command(help="Lässt dich an der Slot-Maschine drehen.")
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def slots(self, ctx, bet: int):
+        db.database.execute(f'SELECT * FROM userdata WHERE d_id = {ctx.message.author.id}')
+        result = db.database.fetchall()
+        current_money = result[0][7]
+        if current_money < bet:
+            await ctx.send("Du hast nicht genug Geld um ein Spiel 'Slots' zu spielen.")
+            return
         if bet > 250:
             await ctx.send("Der maximale Einsatz beträgt 250.")
             return
@@ -93,6 +99,9 @@ class Casino(commands.Cog):
         result = db.database.fetchall()
         current_money = result[0][7]
         if current_money < bet:
+            await ctx.send("Du hast nicht genug Geld um ein Spiel 'Roulette' zu spielen.")
+            return
+        if current_money < len(args) * bet:
             await ctx.send("Du hast nicht genug Geld um ein Spiel 'Roulette' zu spielen.")
             return
         if bet <=0:
