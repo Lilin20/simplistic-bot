@@ -22,6 +22,11 @@ class Cases(commands.Cog):
     """Modul für die Economyfunktionen"""
     def __init__(self, bot):
         self.bot = bot
+        self.rarities = ["Common", "Uncommon", "Rare", "Super Rare", "Legendary", "Mythical", "Godly"]
+        self.chances = [80, 20, 10, 2.5, 1, 0.5, 0.2]
+
+    def get_rarity(self):
+        return random.choices(self.rarities, self.chances, k=1)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -38,6 +43,13 @@ class Cases(commands.Cog):
             embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
             embed.set_footer(text="Schlüssel können im Keyshop erworben werden.")
             await message.channel.send(embed=embed)'''
+
+    @commands.command()
+    @commands.has_any_role("Klassenmanagement", "Verwalter")
+    async def givecase(self, ctx, user:discord.Member, amount:int):
+        user_id = user.id
+        db.database.execute(f"UPDATE userdata SET cases = cases + {amount} WHERE d_id = {user_id}")
+        await ctx.send("Kisten wurden erfolgreich gesendet.")
 
     @commands.command()
     @commands.has_any_role("Klassenmanagement", "Verwalter")

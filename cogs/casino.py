@@ -169,7 +169,7 @@ class Casino(commands.Cog):
         bot_number = random.randint(1, 50)
         player_number = random.randint(1, 50)
         while bot_number == player_number:
-            bot_number = random.randint(1, 50)
+            bot_number = random.randint(2, 49)
         await ctx.send(f'{ctx.message.author.mention} du hast die Nummer {player_number} bekommen. Higher or Lower?')
         while True:
             try:

@@ -75,6 +75,7 @@ for filename in os.listdir(os.path.dirname(os.path.realpath(__file__))+"/cogs"):
         bot.load_extension(f'cogs.{filename[:-3]}')
 
 @bot.command(help="Zeigt Informationen zum Bot aus.")
+@has_permissions(administrator=True)
 async def about(ctx):
     if ctx.message.author.guild_permissions.administrator:
         await ctx.send(file=discord.File('logo_long.png'))
