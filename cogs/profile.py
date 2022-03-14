@@ -16,6 +16,7 @@ def getpath():
 
 sys.path.insert(1, getpath())
 import database as db
+import embed_builder as eb
 
 
 class Profile(commands.Cog):
@@ -64,28 +65,23 @@ class Profile(commands.Cog):
                 db.database.execute(f'SELECT * FROM userdata WHERE d_id = {i.id}')
                 result = db.database.fetchall()
 
-                embedVar = discord.Embed(title=i.display_name, description=result[0][10], color=0x0000CD)
-                embedVar.set_thumbnail(url=i.avatar_url)
-                embedVar.add_field(name="💬 Messages", value=result[0][5], inline=True)
-                embedVar.add_field(name="⚡ Level", value=result[0][3], inline=True)
-                embedVar.add_field(name="\u200b", value="\u200b", inline=True)
-                embedVar.add_field(name="💴 Money", value=result[0][7], inline=True)
-                embedVar.add_field(name="ID", value=result[0][2], inline=True)
-                embedVar.add_field(name="So oft wurde dir Geld geklaut", value=result[0][11], inline=False)
-                embedVar.add_field(name="Entwichene Raubversuche", value=result[0][12], inline=True)
-                embedVar.add_field(name="Gearbeitete Stunden", value=result[0][13], inline=True)
-                #embedVar.add_field(name="\u200b", value="\u200b", inline=True)
-
                 role_mention = []
                 for role in i.roles:
                     if role.name != "@everyone":
                         role_mention.append(role.mention)
                 role_string = ", ".join(role_mention)
-                embedVar.add_field(name="Roles", value=role_string, inline=False)
 
-                embedVar.add_field(name="\u200b", value="\u200b")
-                embedVar.add_field(name="\u200b", value="\u200b")
-                embedVar.set_footer(text=f"📅 Beitritt am: {result[0][6]}")
+                embed=eb.build_embed(f"{i.display_name}", f"{result[0][10]}", 
+                    [["💬 Messages", result[0][5], True], 
+                    ["⚡ Level", result[0][3], True],
+                    ["💴 Money", result[0][7], True], 
+                    ["ID", result[0][2], True],
+                    ["So oft wurde dir Geld geklaut", result[0][11], False],
+                    ["Entwichene Raubversuche", result[0][12], True],
+                    ["Gearbeitete Stunden", result[0][13], True],
+                    ["Roles", role_string, False],
+                    ["\u200b", "\u200b", False]],
+                    0x00ff00, f"📅 Beitritt am: {result[0][6]}", i.avatar_url)
 
         else:
             db.database.execute(f'SELECT * FROM userdata WHERE d_id = {ctx.author.id}')
@@ -109,30 +105,27 @@ class Profile(commands.Cog):
             user_id = ctx.author.id
             db.database.execute(f'SELECT * FROM userdata WHERE d_id = {user_id}')
             result = db.database.fetchall()
-            embedVar = discord.Embed(title=ctx.author.display_name, description=result[0][10], color=0x0000CD)
-            embedVar.set_thumbnail(url=ctx.author.avatar_url)
-            embedVar.add_field(name="💬 Messages", value=result[0][5], inline=True)
-            embedVar.add_field(name="⚡ Level", value=result[0][3], inline=True)
-            embedVar.add_field(name="Progress", value=xp_bar)
-            embedVar.add_field(name="💴 Money", value=result[0][7], inline=True)
-            embedVar.add_field(name="ID", value=result[0][2], inline=True)
-            embedVar.add_field(name="So oft wurde dir Geld geklaut", value=result[0][11], inline=False)
-            embedVar.add_field(name="Entwichene Raubversuche", value=result[0][12], inline=True)
-            embedVar.add_field(name="Gearbeitete Stunden", value=result[0][13], inline=True)
-            #embedVar.add_field(name="\u200b", value="\u200b")
 
             role_mention = []
             for role in user.roles:
                 if role.name != "@everyone":
                     role_mention.append(role.mention)
             role_string = ", ".join(role_mention)
-            embedVar.add_field(name="Roles", value=role_string, inline=False)
 
-            embedVar.add_field(name="\u200b", value="\u200b")
-            embedVar.add_field(name="\u200b", value="\u200b")
-            embedVar.set_footer(text=f"📅 Beitritt am: {result[0][6]}")
+            embed=eb.build_embed(f"{ctx.author.display_name}", f"{result[0][10]}", 
+                [["💬 Messages", result[0][5], True], 
+                ["⚡ Level", result[0][3], True],
+                ["Progress", xp_bar, True], 
+                ["💴 Money", result[0][7], False], 
+                ["ID", result[0][2], True],
+                ["So oft wurde dir Geld geklaut", result[0][11], False],
+                ["Entwichene Raubversuche", result[0][12], True],
+                ["Gearbeitete Stunden", result[0][13], True],
+                ["Roles", role_string, False],
+                ["\u200b", "\u200b", False]],
+                0x00ff00, f"📅 Beitritt am: {result[0][6]}", ctx.author.avatar_url)
 
-        await ctx.send(embed=embedVar)
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def testprofile(self, ctx, *args:discord.Member):
@@ -141,28 +134,23 @@ class Profile(commands.Cog):
                 db.database.execute(f'SELECT * FROM userdata WHERE d_id = {i.id}')
                 result = db.database.fetchall()
 
-                embedVar = discord.Embed(title=i.display_name, description=result[0][10], color=0x0000CD)
-                embedVar.set_thumbnail(url=i.avatar_url)
-                embedVar.add_field(name="💬 Messages", value=result[0][5], inline=True)
-                embedVar.add_field(name="⚡ Level", value=result[0][3], inline=True)
-                embedVar.add_field(name="\u200b", value="\u200b", inline=True)
-                embedVar.add_field(name="💴 Money", value=result[0][7], inline=True)
-                embedVar.add_field(name="ID", value=result[0][2], inline=True)
-                embedVar.add_field(name="So oft wurde dir Geld geklaut", value=result[0][11], inline=False)
-                embedVar.add_field(name="Entwichene Raubversuche", value=result[0][12], inline=True)
-                embedVar.add_field(name="Gearbeitete Stunden", value=result[0][13], inline=True)
-                #embedVar.add_field(name="\u200b", value="\u200b", inline=True)
-
                 role_mention = []
                 for role in i.roles:
                     if role.name != "@everyone":
                         role_mention.append(role.mention)
                 role_string = ", ".join(role_mention)
-                embedVar.add_field(name="Roles", value=role_string, inline=False)
 
-                embedVar.add_field(name="\u200b", value="\u200b")
-                embedVar.add_field(name="\u200b", value="\u200b")
-                embedVar.set_footer(text=f"📅 Beitritt am: {result[0][6]}")
+                embed=eb.build_embed(f"{i.display_name}", f"{result[0][10]}", 
+                    [["💬 Messages", result[0][5], True], 
+                    ["⚡ Level", result[0][3], True],
+                    ["💴 Money", result[0][7], True], 
+                    ["ID", result[0][2], True],
+                    ["So oft wurde dir Geld geklaut", result[0][11], False],
+                    ["Entwichene Raubversuche", result[0][12], True],
+                    ["Gearbeitete Stunden", result[0][13], True],
+                    ["Roles", role_string, False],
+                    ["\u200b", "\u200b", False]],
+                    0x00ff00, f"📅 Beitritt am: {result[0][6]}", i.avatar_url)
 
         else:
             db.database.execute(f'SELECT * FROM userdata WHERE d_id = {ctx.author.id}')
@@ -186,30 +174,27 @@ class Profile(commands.Cog):
             user_id = ctx.author.id
             db.database.execute(f'SELECT * FROM userdata WHERE d_id = {user_id}')
             result = db.database.fetchall()
-            embedVar = discord.Embed(title=ctx.author.display_name, description=result[0][10], color=0x0000CD)
-            embedVar.set_thumbnail(url=ctx.author.avatar_url)
-            embedVar.add_field(name="💬 Messages", value=result[0][5], inline=True)
-            embedVar.add_field(name="⚡ Level", value=result[0][3], inline=True)
-            embedVar.add_field(name="Progress", value=xp_bar)
-            embedVar.add_field(name="💴 Money", value=result[0][7], inline=True)
-            embedVar.add_field(name="ID", value=result[0][2], inline=True)
-            embedVar.add_field(name="So oft wurde dir Geld geklaut", value=result[0][11], inline=False)
-            embedVar.add_field(name="Entwichene Raubversuche", value=result[0][12], inline=True)
-            embedVar.add_field(name="Gearbeitete Stunden", value=result[0][13], inline=True)
-            #embedVar.add_field(name="\u200b", value="\u200b")
 
             role_mention = []
             for role in user.roles:
                 if role.name != "@everyone":
                     role_mention.append(role.mention)
             role_string = ", ".join(role_mention)
-            embedVar.add_field(name="Roles", value=role_string, inline=False)
 
-            embedVar.add_field(name="\u200b", value="\u200b")
-            embedVar.add_field(name="\u200b", value="\u200b")
-            embedVar.set_footer(text=f"📅 Beitritt am: {result[0][6]}")
+            embed=eb.build_embed(f"{ctx.author.display_name}", f"{result[0][10]}", 
+                [["💬 Messages", result[0][5], True], 
+                ["⚡ Level", result[0][3], True],
+                ["Progress", xp_bar, True], 
+                ["💴 Money", result[0][7], False], 
+                ["ID", result[0][2], True],
+                ["So oft wurde dir Geld geklaut", result[0][11], False],
+                ["Entwichene Raubversuche", result[0][12], True],
+                ["Gearbeitete Stunden", result[0][13], True],
+                ["Roles", role_string, False],
+                ["\u200b", "\u200b", False]],
+                0x00ff00, f"📅 Beitritt am: {result[0][6]}", ctx.author.avatar_url)
 
-        await ctx.send(embed=embedVar)
+        await ctx.send(embed=embed)
 
     @commands.command(help="Setzt einen beliebigen Status für dein Profil.")
     async def set_status(self, ctx, *args):

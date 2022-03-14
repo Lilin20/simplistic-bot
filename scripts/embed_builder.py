@@ -17,12 +17,14 @@ def getpath():
 sys.path.insert(1, getpath())
 import database as db
 
-def build_embed(title: str, description: str, color, field_amount: int, key_listDict: dict):
-    embedVar = discord.Embed(title=title, description=description, color=color)
-    for field in range(field_amount+1):
-        for key in key_listDict:
-            if key_listDict[key][2] == True:
-                embedVar.add_field(name=key_listDict[key][0], value=key_listDict[key][1], inline=True)
-            else:
-                embedVar.add_field(name=key_listDict[key][0], value=key_listDict[key][1], inline=False)
-    return embedVar
+#Discord.py method that builds an embed with multiple fields
+def build_embed(title, description, fields, color, footer, thumbnail):
+    embed = discord.Embed(title=title, description=description, color=color)
+    for field in fields:
+        embed.add_field(name=field[0], value=field[1], inline=field[2])
+    if footer != None:
+        embed.set_footer(text=footer)
+    if thumbnail != None:
+        embed.set_thumbnail(url=thumbnail)
+    return embed
+    
