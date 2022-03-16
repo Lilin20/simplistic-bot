@@ -55,22 +55,22 @@ class Economy(commands.Cog):
         worked_hours = int(calculated_money / 10)
         db.database.execute(f'UPDATE userdata SET worked_hours = worked_hours + {worked_hours} WHERE d_id = {ctx.message.author.id}')
         db.database.execute(f'UPDATE userdata SET money = money + {calculated_money} WHERE d_id = {ctx.message.author.id}')
-        embedVar = discord.Embed(title='Simplistic - Jobcenter', description='Du hast Geld erhalten!', color=discord.Colour.green())
-        embedVar.add_field(name="Arbeitsstunden", value=worked_hours, inline=True)
-        embedVar.add_field(name="Erhaltenes Geld", value=calculated_money, inline=True)
-        await ctx.send(embed=embedVar)
+
+        embed=eb.build_embed(f"Simplistic - Jobcenter", f"Du hast Geld erhalten!", 
+                            [["Arbeitsstunden", worked_hours, True],
+                            ["Erhaltenes Geld", calculated_money, True]],
+                            0x00ff00, None, None, None)
+
+        await ctx.send(embed=embed)
 
     @work.error
     async def work_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
-            embed = discord.Embed(title="Cooldown", color=discord.Color.red())
-
             cd = round(error.retry_after)
             minutes = str(cd // 60)
             seconds = str(cd % 60)
 
-            embed.add_field(name="Achtung",
-                            value=f"Du brauchst erstmal eine Pause. Die Arbeit war anstrengend.\nMach mal eine Pause:\n \n {self.leadingZero(minutes)}:{self.leadingZero(seconds)}.")
+            embed = eb.build_embed("Cooldown", " ", [["Achting", f"Du brauchst erstmal eine Pause. Die Arbeit war anstrengend.\nMach mal eine Pause:\n \n {self.leadingZero(minutes)}:{self.leadingZero(seconds)}.", True]], 0xFF0000, None, None, None)
             await ctx.send(embed=embed)
 
 
@@ -93,11 +93,12 @@ class Economy(commands.Cog):
             # Zum Räuber
             db.database.execute(f'UPDATE userdata SET money = money + {money} WHERE d_id = {ctx.message.author.id}')
 
-            embedVar = discord.Embed(title='Simplistic - Economy', description='Ein User wurde ausgeraubt!', color=discord.Colour.red())
-            embedVar.add_field(name='Räuber', value=ctx.message.author.display_name, inline=True)
-            embedVar.add_field(name='Opfer', value=user.display_name, inline=True)
-            embedVar.add_field(name='Erbeuteter Betrag', value=int(money), inline=False)
-            await ctx.send(embed=embedVar)
+            embed=eb.build_embed(f"Simplistic - Economy", f"Ein User wurde ausgeraubt!", 
+                            [["Räuber", ctx.message.author.display_name, True],
+                            ["Opfer", user.display_name, True],
+                            ["Erbeuteter Betrag", int(money), False]],
+                            0xFF0000, None, None, None)
+            await ctx.send(embed=embed)
 
         else:
             db.database.execute(f'UPDATE userdata SET robbed_fail = robbed_fail + 1 WHERE d_id = {user.id}')
@@ -106,13 +107,11 @@ class Economy(commands.Cog):
     @rob.error
     async def rob_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
-            embed = discord.Embed(title="Cooldown", color=discord.Color.red())
-
             cd = round(error.retry_after)
             minutes = str(cd // 60)
             seconds = str(cd % 60)
 
-            embed.add_field(name="Achtung", value=f"Deine kriminelle Energie ist zu schwach für den nächsten Raubzug.\nMach mal eine Pause:\n \n {self.leadingZero(minutes)}:{self.leadingZero(seconds)}.")
+            embed = eb.build_embed("Cooldown", " ", [["Achting", f"Deine kriminelle Energie ist zu schwach für den nächsten Raubzug.\nMach mal eine Pause:\n \n {self.leadingZero(minutes)}:{self.leadingZero(seconds)}.", True]], 0xFF0000, None, None, None)
             await ctx.send(embed=embed)
 
     def leadingZero(self, time: str):
@@ -120,8 +119,6 @@ class Economy(commands.Cog):
             return time
 
         return "0" + time
-
-
 
 
 

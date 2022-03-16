@@ -6,7 +6,6 @@ import platform
 import redditeasy
 import datetime
 import asyncio
-from itawiki_api_wrapper import auth, posts
 import mal
 
 def getpath():
@@ -19,6 +18,7 @@ def getpath():
 
 sys.path.insert(1, getpath())
 import database as db
+import embed_builder as eb
 
 
 class Fun(commands.Cog, name="Fun", description="Enthält alle Funktionen die zur Unterhaltung dienen."):
@@ -36,45 +36,28 @@ class Fun(commands.Cog, name="Fun", description="Enthält alle Funktionen die zu
     @commands.command(help="Erstellt einen Vorschlag mit direktem voting.")
     async def suggestion(self, ctx, *, suggestion):
         emotes = ['👍','👎']
-        embedVar = discord.Embed(title='Simplistic - Suggestion', description=f'Vorschlag von {ctx.message.author.mention}', color=discord.Colour.blue())
-        embedVar.add_field(name='Vorschlag', value=f'{suggestion}')
+        embed = eb.build_embed(f"Simplistic - Suggestion", f"Vorschlag von {ctx.message.author.mention}",
+                            [["Vorschlag", suggestion, True]],
+                            0xFF0000, None, None, None)
 
-        message = await ctx.send(embed=embedVar)
+        message = await ctx.send(embed=embed)
 
         for emote in emotes:
             await message.add_reaction(emote)
-
-
-    @commands.command(help="Sucht nach einem Beitrag im ITA-Wiki.")
-    async def itasearch(self, ctx, keywords):
-        auth.login('marvingrunwald2000@gmail.com', 'ita19b2021')
-        result = posts.search(keywords)
-        embedVar = discord.Embed(title='ITA-Wiki Search', description=f'Benutzte Keywords: {keywords}')
-        embedVar.add_field(name='Titel', value=f'{result["title"]}')
-        embedVar.add_field(name='URL', value=f'{result["url"]}')
-        await ctx.send(embed=embedVar)
 
     @commands.command(help="Gibt ein zufälligs Meme von Reddit aus.")
     async def meme(self, ctx):
         post = redditeasy.Subreddit(client_id="tdEFqzh4aZ8Gpw", client_secret="_LbOSNTPnUJq6n7KZpfPUllAme-4JQ", user_agent="Anime Module / TBS Bot")
         output = post.get_post(subreddit="dankmemes")
         formatted_time = datetime.datetime.fromtimestamp(output.created_at).strftime("%d/%m/%Y %I:%M:%S CEST")
-        embedVar = discord.Embed(title=output.title, description=f'Redditor: {output.author}', color=0x0000CD)
-        embedVar.add_field(name="Upvotes", value=f'{output.score}', inline=True)
-        embedVar.add_field(name="Erstellt am", value=f'{formatted_time}', inline=True)
-        embedVar.set_image(url=output.content)
-        await ctx.send(embed=embedVar)
+    
+        embed=eb.build_embed(f"{output.title}", f"Redditor: {output.author}", 
+                            [["Upvotes", f"{output.score}", True],
+                            ["Erstellt am", f"{formatted_time}", True]],
+                            0xFF0000, None, None, None)
+        embed.set_image(url=output.content)
 
-    @commands.command(help="Gibt einen Beitrag aus einem Subreddit aus.")
-    async def reddit(self, ctx, subreddit):
-        post = redditeasy.Subreddit(client_id="tdEFqzh4aZ8Gpw", client_secret="_LbOSNTPnUJq6n7KZpfPUllAme-4JQ", user_agent="Anime Module / TBS Bot")
-        output = post.get_post(subreddit=subreddit)
-        formatted_time = datetime.datetime.fromtimestamp(output.created_at).strftime("%d/%m/%Y %I:%M:%S CEST")
-        embedVar = discord.Embed(title=output.title, description=f'Redditor: {output.author}', color=0x0000CD)
-        embedVar.add_field(name="Upvotes", value=f'{output.score}', inline=True)
-        embedVar.add_field(name="Erstellt am", value=f'{formatted_time}', inline=True)
-        embedVar.set_image(url=output.content)
-        await ctx.send(embed=embedVar)
+        await ctx.send(embed=embed)
 
     @commands.command(help="Zeigt dir die höchsten User im Bereich Level oder Geld an.")
     async def top(self, ctx, option):
@@ -82,51 +65,43 @@ class Fun(commands.Cog, name="Fun", description="Enthält alle Funktionen die zu
             db.database.execute(f'SELECT * FROM userdata ORDER BY lvl DESC LIMIT 5')
             result = db.database.fetchall()
             embedVar = discord.Embed(title="Leaderboard (Top 5)", description='Absteigend nach Level', color=0x0000CD)
+            embed = eb.build_embed(f"Leaderboard (Top 5)", f"Absteigend nach Level", 
+                            [],
+                            0x0000CD, None, None, None)
             for i in range(len(result)):
                 user = await self.bot.fetch_user(result[i][2])
                 username = user.name
-                embedVar.add_field(name=f"{i + 1}. {username}", value=f'Level: {result[i][3]}', inline=False)
-            await ctx.send(embed=embedVar)
+                embed.add_field(name=f"{i + 1}. {username}", value=f'Level: {result[i][3]}', inline=False)
+                
+
+            await ctx.send(embed=embed)
 
         elif option == "money":
             db.database.execute(f'SELECT * FROM userdata ORDER BY money DESC LIMIT 5')
             result = db.database.fetchall()
-            embedVar = discord.Embed(title="Leaderboard (Top 5)", description='Absteigend nach Vermögen', color=0x0000CD)
+            embed = eb.build_embed(f"Leaderboard (Top 5)", f"Absteigend nach Vermögen", 
+                            [],
+                            0x0000CD, None, None, None)
             for i in range(len(result)):
                 user = await self.bot.fetch_user(result[i][2])
                 username = user.name
-                embedVar.add_field(name=f"{i + 1}. {username}", value=f'Vermögen: {result[i][7]}', inline=False)
-            await ctx.send(embed=embedVar)
+                embed.add_field(name=f"{i + 1}. {username}", value=f'Vermögen: {result[i][7]}', inline=False)
+            await ctx.send(embed=embed)
+
+        elif option == "messages":
+            db.database.execute(f'SELECT * FROM userdata ORDER BY msg DESC LIMIT 5')
+            result = db.database.fetchall()
+            embed = eb.build_embed(f"Leaderboard (Top 5)", f"Absteigend nach Nachrichten",
+                            [],
+                            0x0000CD, None, None, None)
+            for i in range(len(result)):
+                user = await self.bot.fetch_user(result[i][2])
+                username = user.name
+                embed.add_field(name=f"{i + 1}. {username}", value=f'Nachrichten: {result[i][5]}', inline=False)
+            await ctx.send(embed=embed)
 
         else:
             await ctx.send("Dieses Leaderboard gibt es nicht. Folgende Leaderboards sind verfügbar: money, level")
-
-    @commands.command(help="Gibt Informationen zu einem Anime aus.")
-    async def anime(self, ctx, option, *, keywords=None,):
-        if option == 'search':
-            result_first = mal.AnimeSearch(keywords, timeout=1)
-            result = mal.Anime(result_first.results[0].mal_id, timeout=1)
-
-            genres = ""
-            for genre in result.genres:
-                genres += genre + ", "
-
-            studios = ""
-            for studio in result.studios:
-                studios += studio + ", "
-
-
-            embedVar = discord.Embed(title=f"{result.title_japanese}", description=f'{result.title_english}')
-            embedVar.add_field(name='Genres', value=f'{genres[:-2]}', inline=True)
-            embedVar.add_field(name='Veröffentlicht', value=f'{result.aired}', inline=True)
-            embedVar.add_field(name='Studio', value=f'{studios[:-2]}', inline=True)
-            embedVar.add_field(name='Rating', value=f'{result.rating}', inline=True)
-            embedVar.add_field(name='Score', value=f'{result.score} / 10', inline=True)
-            embedVar.add_field(name='Episoden', value=f'{result.episodes}', inline=True)
-            embedVar.add_field(name='URL', value=f'{result.url}', inline=True)
-            embedVar.set_thumbnail(url=result.image_url)
-            await ctx.send(embed=embedVar)
-
 
     @commands.command(help="Erstellt ein zeitlichbegrenztes Voting.")
     @commands.has_permissions(administrator=True)

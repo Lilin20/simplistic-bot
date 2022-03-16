@@ -116,37 +116,45 @@ class Casino(commands.Cog):
             if msg.author.id == ctx.message.author.id:
                 if msg.content == "higher" or msg.content == "Higher":
                     if bot_number > player_number:
-                        embedVar = discord.Embed(title="Simplistic - Gamble", description=f"Higher or Lower", color=0x00ff00)
-                        embedVar.add_field(name="User", value=ctx.message.author.mention)
-                        embedVar.add_field(name="Zahl vom Bot", value=bot_number, inline=False)
-                        embedVar.add_field(name="Gewonnener Betrag", value=amount, inline=False)
-                        await ctx.send(embed=embedVar)
+                        embed=eb.build_embed(f"Simplistic - Gamble", f"Higher or Lower", 
+                            [["User", ctx.message.author.mention, True],
+                            ["Zahl vom Bot", bot_number, False],
+                            ["Gewonnener Betrag", amount, False]],
+                            0x00ff00, None, None, None)
+
+                        await ctx.send(embed=embed)
                         db.database.execute(f"UPDATE userdata SET money = money + {amount} WHERE d_id = {ctx.message.author.id}")
                         return
                     else:
-                        embedVar = discord.Embed(title="Simplistic - Gamble", description=f"Higher or Lower", color=discord.Colour.red())
-                        embedVar.add_field(name="User", value=ctx.message.author.mention)
-                        embedVar.add_field(name="Zahl vom Bot", value=bot_number, inline=False)
-                        embedVar.add_field(name="Verlorener Betrag", value=amount, inline=False)
-                        await ctx.send(embed=embedVar)
+                        embed=eb.build_embed(f"Simplistic - Gamble", f"Higher or Lower", 
+                            [["User", ctx.message.author.mention, True],
+                            ["Zahl vom Bot", bot_number, False],
+                            ["Verlorener Betrag", amount, False]],
+                            0xFF0000, None, None, None)
+
+                        await ctx.send(embed=embed)
                         db.database.execute(f"UPDATE userdata SET money = money - {amount} WHERE d_id = {ctx.message.author.id}")
                         return
 
                 if msg.content == "lower" or msg.content == "Lower":
                     if bot_number < player_number:
-                        embedVar = discord.Embed(title="Simplistic - Gamble", description=f"Higher or Lower", color=0x00ff00)
-                        embedVar.add_field(name="User", value=ctx.message.author.mention)
-                        embedVar.add_field(name="Zahl vom Bot", value=bot_number, inline=False)
-                        embedVar.add_field(name="Gewonnener Betrag", value=amount, inline=False)
-                        await ctx.send(embed=embedVar)
+                        embed=eb.build_embed(f"Simplistic - Gamble", f"Higher or Lower", 
+                            [["User", ctx.message.author.mention, True],
+                            ["Zahl vom Bot", bot_number, False],
+                            ["Gewonnener Betrag", amount, False]],
+                            0x00ff00, None, None, None)
+
+                        await ctx.send(embed=embed)
                         db.database.execute(f"UPDATE userdata SET money = money + {amount} WHERE d_id = {ctx.message.author.id}")
                         return
                     else:
-                        embedVar = discord.Embed(title="Simplistic - Gamble", description=f"Higher or Lower", color=discord.Colour.red())
-                        embedVar.add_field(name="User", value=ctx.message.author.mention)
-                        embedVar.add_field(name="Zahl vom Bot", value=bot_number, inline=False)
-                        embedVar.add_field(name="Verlorener Betrag", value=amount, inline=False)
-                        await ctx.send(embed=embedVar)
+                        embed=eb.build_embed(f"Simplistic - Gamble", f"Higher or Lower", 
+                            [["User", ctx.message.author.mention, True],
+                            ["Zahl vom Bot", bot_number, False],
+                            ["Verlorener Betrag", amount, False]],
+                            0xFF0000, None, None, None)
+
+                        await ctx.send(embed=embed)
                         db.database.execute(f"UPDATE userdata SET money = money - {amount} WHERE d_id = {ctx.message.author.id}")
                         return
 
