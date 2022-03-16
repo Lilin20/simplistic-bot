@@ -53,10 +53,8 @@ class Profile(commands.Cog):
                 db.database.execute(f'UPDATE userdata SET xp = 0 WHERE d_id = {message.author.id}')
                 db.database.execute(f'UPDATE userdata SET growth = growth + 0.025 WHERE d_id = {message.author.id}')
                 db.database.execute(f'UPDATE userdata SET money = money + 50 WHERE d_id = {message.author.id}')
-                embedVar = discord.Embed(title="Level Up!", description=f'{message.author.name} hat ein neues Level erreicht!', color=0x0000CD)
-                embedVar.set_thumbnail(url="https://i.redd.it/5ej93xbz1jo51.gif")
-                embedVar.set_author(name=message.author, url=" ",icon_url=message.author.avatar_url)
-                await message.channel.send(embed=embedVar, delete_after=5)
+                embed = eb.build_embed("Level Up!", f'{message.author.name} hat ein neues Level erreicht!', [["Level", f"{fetched_level + 1}", True]], 0x0000CD, None, "https://i.redd.it/5ej93xbz1jo51.gif", [message.author.name, " ", message.author.avatar_url])
+                await message.channel.send(embed=embed, delete_after=5)
 
     @commands.command(help="Zeigt dein Profil oder as Profil von einem anderen User an.")
     async def profile(self, ctx, *args:discord.Member):
@@ -81,7 +79,7 @@ class Profile(commands.Cog):
                     ["Gearbeitete Stunden", result[0][13], True],
                     ["Roles", role_string, False],
                     ["\u200b", "\u200b", False]],
-                    0x00ff00, f"📅 Beitritt am: {result[0][6]}", i.avatar_url)
+                    0x00ff00, f"📅 Beitritt am: {result[0][6]}", i.avatar_url, None)
 
         else:
             db.database.execute(f'SELECT * FROM userdata WHERE d_id = {ctx.author.id}')
@@ -123,7 +121,7 @@ class Profile(commands.Cog):
                 ["Gearbeitete Stunden", result[0][13], True],
                 ["Roles", role_string, False],
                 ["\u200b", "\u200b", False]],
-                0x00ff00, f"📅 Beitritt am: {result[0][6]}", ctx.author.avatar_url)
+                0x00ff00, f"📅 Beitritt am: {result[0][6]}", ctx.author.avatar_url, None)
 
         await ctx.send(embed=embed)
 
@@ -150,7 +148,7 @@ class Profile(commands.Cog):
                     ["Gearbeitete Stunden", result[0][13], True],
                     ["Roles", role_string, False],
                     ["\u200b", "\u200b", False]],
-                    0x00ff00, f"📅 Beitritt am: {result[0][6]}", i.avatar_url)
+                    0x00ff00, f"📅 Beitritt am: {result[0][6]}", i.avatar_url, None)
 
         else:
             db.database.execute(f'SELECT * FROM userdata WHERE d_id = {ctx.author.id}')
@@ -192,7 +190,7 @@ class Profile(commands.Cog):
                 ["Gearbeitete Stunden", result[0][13], True],
                 ["Roles", role_string, False],
                 ["\u200b", "\u200b", False]],
-                0x00ff00, f"📅 Beitritt am: {result[0][6]}", ctx.author.avatar_url)
+                0x00ff00, f"📅 Beitritt am: {result[0][6]}", ctx.author.avatar_url, None)
 
         await ctx.send(embed=embed)
 

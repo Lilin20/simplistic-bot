@@ -16,6 +16,7 @@ def getpath():
 
 sys.path.insert(1, getpath())
 import database as db
+import embed_builder as eb
 
 
 class Economy(commands.Cog):
@@ -34,24 +35,20 @@ class Economy(commands.Cog):
     @commands.cooldown(1, 86400, commands.BucketType.user)
     async def daily(self, ctx):
         db.database.execute(f'UPDATE userdata SET money = money + 150 WHERE d_id = {ctx.message.author.id}')
-        embedVar = discord.Embed(title='Simplistic - Economy', description='Daily Reward abgeholt!', color=discord.Colour.green())
-        embedVar.add_field(name='Erhaltenes Geld', value=150, inline=True)
-        await ctx.send(embed=embedVar)
+        embed = eb.build_embed("Simplistic - Economy", "Daily Reward abgeholt!",  [["Erhaltenes Geld", 150, True]], 0x00FF00, None, None, None)
+        await ctx.send(embed=embed)
 
     @daily.error
     async def daily_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
-            embed = discord.Embed(title="Cooldown", color=discord.Color.red())
-
             cd = round(error.retry_after)
             minutes = str(cd // 60)
             seconds = str(cd % 60)
 
-            embed.add_field(name="Achtung",
-                            value=f"Du hast bereits deine tägliche Summe an Geld abgeholt.\nBitte warte:\n \n {self.leadingZero(minutes)}:{self.leadingZero(seconds)}.")
+            embed = eb.build_embed("Cooldown", " ", [["Achting", f"Du hast bereits deine tägliche Summe an Geld abgeholt.\nBitte warte:\n \n {self.leadingZero(minutes)}:{self.leadingZero(seconds)}.", True]], 0xFF0000, None, None, None)
             await ctx.send(embed=embed)
 
-    @commands.command(help="Gibt ir Geld für gearbeitete Stunden.")
+    @commands.command(help="Gibt dir Geld für gearbeitete Stunden.")
     @commands.cooldown(1, 3600, commands.BucketType.user)
     async def work(self, ctx):
         calculated_money = random.randrange(10, 150, 10)
