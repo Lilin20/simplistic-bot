@@ -16,6 +16,7 @@ def getpath():
 
 sys.path.insert(1, getpath())
 import database as db
+import embed_builder as eb
 
 #----------Schul-Modul----------
 class School(commands.Cog):
@@ -45,8 +46,10 @@ class School(commands.Cog):
             channels.append(ch.name)
         for name in channel_names:
             if name in channels:
-                embedVar = discord.Embed(title="Konnte nicht asgeführt werden.", description="Der Befehl konnte nicht ausgeführt werden da diese schon ausgeführt wurde.", color=0xff1c1c)
-                await ctx.send(embed=embedVar)
+                embed = eb.build_embed(f"Konnte nicht ausgeführt werden.", f"Dieser Befehl wurde vermutlich schonmal ausgeführt.", 
+                            [],
+                            0xFF1C1C, None, None, None)
+                await ctx.send(embed=embed)
                 return
 
         category = await ctx.guild.create_category_channel(name="SETUP CHANNELS")
@@ -81,11 +84,10 @@ class School(commands.Cog):
                 string += word+" "
             db.database.execute(f'INSERT INTO homework(task, task_date) VALUES("{string}", "{homeworkdate}")')
         else:
-            embedVar = discord.Embed(title="Keine Eingabe",
-                                     description="Bitte gebe hinter dem Befehl die einzutragenden Hausaufgaben an.",
-                                     color=0xff1c1c)
-            embedVar.add_field(name="Syntax", value=".set_hausaufgaben <AUFGABE>")
-            await ctx.send(embed=embedVar)
+            embed = eb.build_embed(f"Keine Eingabe", "Bitte gebe hinter dem Befehl die einzutragenden Hausaufgaben an.",
+                            [["Syntax", ".set_hausaufgaben <AUFGABE>", True]],
+                            0xFF1C1C, None, None, None)
+            await ctx.send(embed=embed)
 #----------------------------------------------------------------------------------------------------------------------
 
 
@@ -93,10 +95,10 @@ class School(commands.Cog):
     @set_homework.error
     async def set_homework_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            embedVar = discord.Embed(title="Keine Berechtigung",
-                                     description="Du hast nicht die benötigten Rechte um diesen Befehl auszuführen.",
-                                     color=0xff1c1c)
-            await ctx.send(embed=embedVar)
+            embed = eb.build_embed("Keine Berechtigung", "Du hast nicht die benötigten Rechte um diesen Befehl auszuführen.", 
+                            [],
+                            0xFF1C1C, None, None, None)
+            await ctx.send(embed=embed)
 
 #----------------------------------------------------------------------------
 
@@ -106,14 +108,14 @@ class School(commands.Cog):
     async def homework(self, ctx):
         db.database.execute(f'SELECT task, task_date FROM homework')
         result = db.database.fetchall()
-        embedVar = discord.Embed(title="Hausaufgaben",
-                                 description="Dies sind die aktuellen Hausaufgaben. Falls diese nicht korrekt sind, wende dich bitte an das Klassenmanagement.",
-                                 color=0xff1c1c)
+        embed = eb.build_embed("Hausaufgaben", "Dies sind die aktuellen Hausaufgaben. Falls diese nicht korrekt sind, wende dich bitte an das Klassenmanagement.", 
+                            [],
+                            0xFF1C1C, None, None, None)
         for i in range(len(result)):
-            embedVar.add_field(name="Hausaufgabe", value=result[i][0], inline=True)
-            embedVar.add_field(name="Datum", value=result[i][1], inline=True)
-            embedVar.add_field(name="\u200b", value="\u200b")
-        await ctx.message.author.send(embed=embedVar)
+            embed.add_field(name="Hausaufgabe", value=result[i][0], inline=True)
+            embed.add_field(name="Datum", value=result[i][1], inline=True)
+            embed.add_field(name="\u200b", value="\u200b")
+        await ctx.message.author.send(embed=embed)
 #---------------------------------------------------------------------------------------------
 
 
@@ -128,11 +130,10 @@ class School(commands.Cog):
             db.database.execute(f'UPDATE homework SET h_id = @num := (@num+1)')
             db.database.execute(f'ALTER TABLE homework AUTO_INCREMENT =1')
         else:
-            embedVar = discord.Embed(title="Keine Eingabe",
-                                     description="Bitte gebe hinter dem Befehl die zu löschende Hausaufgaben-ID an.",
-                                     color=0xff1c1c)
-            embedVar.add_field(name="Syntax", value=".del_homework <ID>")
-            await ctx.send(embed=embedVar)
+            embed = eb.build_embed(f"Keine Eingabe", "Bitte gebe hinter dem Befehl die einzutragenden Hausaufgaben an.",
+                            [["Syntax", ".del_homework <ID>", True]],
+                            0xFF1C1C, None, None, None)
+            await ctx.send(embed=embed)
 #---------------------------------------------------------------
 
 
@@ -150,14 +151,14 @@ class School(commands.Cog):
     async def show_homework(self):
         db.database.execute(f'SELECT task, task_date FROM homework ORDER BY task_date ASC')
         result = db.database.fetchall()
-        embedVar = discord.Embed(title="Hausaufgaben",
-                                 description="Dies sind die aktuellen Hausaufgaben. Falls diese nicht korrekt sind, wende dich bitte an das Klassenmanagement.",
-                                 color=0xff1c1c)
+        embed = eb.build_embed("Hausaufgaben", "Dies sind die aktuellen Hausaufgaben. Falls diese nicht korrekt sind, wende dich bitte an das Klassenmanagement.", 
+                            [],
+                            0xFF1C1C, None, None, None)
         for i in range(len(result)):
-            embedVar.add_field(name="Hausaufgabe", value=result[i][0], inline=True)
-            embedVar.add_field(name="Datum", value=result[i][1], inline=True)
-            embedVar.add_field(name="\u200b", value="\u200b")
-        return embedVar
+            embed.add_field(name="Hausaufgabe", value=result[i][0], inline=True)
+            embed.add_field(name="Datum", value=result[i][1], inline=True)
+            embed.add_field(name="\u200b", value="\u200b")
+        return embed
 
     @tasks.loop(hours=4)
     async def notify_homework(self):
@@ -182,14 +183,14 @@ class School(commands.Cog):
     async def exam(self, ctx):
         db.database.execute(f'SELECT test, test_date FROM classtest')
         result = db.database.fetchall()
-        embedVar = discord.Embed(title="Klausuren/Tests",
-                                 description="Dies sind die aktuellen Klausuren/Tests. Falls diese nicht korrekt sind, wende dich bitte an das Klassenmanagement.",
-                                 color=0xff1c1c)
+        embed = eb.build_embed("Klausuren/Tests", "Dies sind die aktuellen Klausuren/Tests. Falls diese nicht korrekt sind, wende dich bitte an das Klassenmanagement.", 
+                            [],
+                            0xFF1C1C, None, None, None)
         for i in range(len(result)):
-            embedVar.add_field(name="Klausuren/Tests", value=result[i][0], inline=True)
-            embedVar.add_field(name="Datum", value=result[i][1], inline=True)
-            embedVar.add_field(name="\u200b", value="\u200b")
-        await ctx.message.author.send(embed=embedVar)
+            embed.add_field(name="Klausuren/Tests", value=result[i][0], inline=True)
+            embed.add_field(name="Datum", value=result[i][1], inline=True)
+            embed.add_field(name="\u200b", value="\u200b")
+        await ctx.message.author.send(embed=embed)
 #-----------------------------------------------------------------------------------------------------------------------
 
 
@@ -204,11 +205,10 @@ class School(commands.Cog):
                 string += word + " "
             db.database.execute(f'INSERT INTO classtest(test, test_date) VALUES("{string}", "{test_date}")')
         else:
-            embedVar = discord.Embed(title="Keine Eingabe",
-                                     description="Bitte gebe hinter dem Befehl die einzutragenden Klausuren/Tests an.",
-                                     color=0xff1c1c)
-            embedVar.add_field(name="Syntax", value=".set_exam <Datum/Fach/Inhalt>")
-            await ctx.send(embed=embedVar)
+            embed = eb.build_embed(f"Keine Eingabe", "Bitte gebe hinter dem Befehl die einzutragenden Klausuren/Tests an.",
+                            [["Syntax", ".set_exam <Datum/Fach/Inhalt>", True]],
+                            0xFF1C1C, None, None, None)
+            await ctx.send(embed=embed)
 #---------------------------------------------------------------------------------------------------------------------------
 
 
@@ -223,11 +223,10 @@ class School(commands.Cog):
             db.database.execute(f'UPDATE classtest SET c_id = @num := (@num+1)')
             db.database.execute(f'ALTER TABLE classtest AUTO_INCREMENT =1')
         else:
-            embedVar = discord.Embed(title="Keine Eingabe",
-                                     description="Bitte gebe hinter dem Befehl die zu löschenden Klausur/Test-ID's an.",
-                                     color=0xff1c1c)
-            embedVar.add_field(name="Syntax", value=".del_exam <ID>")
-            await ctx.send(embed=embedVar)
+            embed = eb.build_embed(f"Keine Eingabe", "Bitte gebe hinter dem Befehl die zu löschenden Klausur/Test-ID's an.",
+                            [["Syntax", ".del_exam <ID>", True]],
+                            0xFF1C1C, None, None, None)
+            await ctx.send(embed=embed)
 
 
 
@@ -238,14 +237,14 @@ class School(commands.Cog):
     async def show_exam(self):
         db.database.execute(f'SELECT test, test_date FROM classtest')
         result = db.database.fetchall()
-        embedVar = discord.Embed(title="Klausuren/Tests",
-                                 description="Dies sind die aktuellen Klausuren/Tests. Falls diese nicht korrekt sind, wende dich bitte an das Klassenmanagement.",
-                                 color=0xff1c1c)
+        embed = eb.build_embed("Klausuren/Tests", "Dies sind die aktuellen Klausuren/Tests. Falls diese nicht korrekt sind, wende dich bitte an das Klassenmanagement.", 
+                            [],
+                            0xFF1C1C, None, None, None)
         for i in range(len(result)):
-            embedVar.add_field(name="Klausuren/Tests", value=result[i][0], inline=True)
-            embedVar.add_field(name="Datum", value=result[i][1], inline=True)
-            embedVar.add_field(name="\u200b", value="\u200b")
-        return embedVar
+            embed.add_field(name="Klausuren/Tests", value=result[i][0], inline=True)
+            embed.add_field(name="Datum", value=result[i][1], inline=True)
+            embed.add_field(name="\u200b", value="\u200b")
+        return embed
 
     @tasks.loop(hours=4)
     async def notify_exam(self):

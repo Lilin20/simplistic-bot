@@ -130,26 +130,32 @@ class Fun(commands.Cog, name="Fun", description="Enthält alle Funktionen die zu
         cached_message = await self.vote_channel.fetch_message(self.message.id)
         reaction_array = [cached_message.reactions[0].count-1, cached_message.reactions[1].count-1]
         if reaction_array[0] > reaction_array[1]:
-            embedVar = discord.Embed(title="Voting Ergebnis", description=f'Die Mehrheit hat für "Ja" gestimmt.',
-                                     color=0x00EE00)
-            await self.vote_channel.send(embed=embedVar)
+            embed = eb.build_embed(f"Voting Ergebnis", f"Die Mehrheit hat für 'Ja' gestimmt.", 
+                            [],
+                            0x00EE00, None, None, None)
+            await self.vote_channel.send(embed=embed)
             return
 
         if reaction_array[1] > reaction_array[0]:
-            embedVar = discord.Embed(title="Voting Ergebnis", description=f'Die Mehrheit hat für "Nein" gestimmt.',
-                                     color=0xFF0000)
-            await self.vote_channel.send(embed=embedVar)
+            embed = eb.build_embed(f"Voting Ergebnis", f"Die Mehrheit hat für 'Nein' gestimmt.", 
+                            [],
+                            0xFF0000, None, None, None)
+            await self.vote_channel.send(embed=embed)
             return
 
         if reaction_array[0] == 0 and reaction_array[1] == 0:
-            embedVar = discord.Embed(title="Voting Ergebnis", description=f'Es wurden keine Stimmen abgegeben, daher liegt kein Ergebnis vor.')
-            await self.vote_channel.send(embed=embedVar)
+            embed = eb.build_embed(f"Voting Ergebnis", f"Es wurden keine Stimmen abgegeben, daher liegt kein Ergebnis vor.", 
+                            [],
+                            0xFF0000, None, None, None)
+            await self.vote_channel.send(embed=embed)
             return
 
-        if reaction_array[0] == reaction_array[1]:
-            embedVar = discord.Embed(title="Voting Ergebnis", description=f'Das Vorting ist unentschieden.',
-                                     color=0xFFA500)
-            await self.vote_channel.send(embed=embedVar)
+        if reaction_array[0] == reaction_array[1]:        
+            embed = eb.build_embed(f"Voting Ergebnis", f"Das Voting ist unentschieden.", 
+                            [],
+                            0xFFA500, None, None, None)
+
+            await self.vote_channel.send(embed=embed)
             return
 
     @commands.command(help="Zeigt das Avatar des gewählten Users.")
@@ -157,9 +163,11 @@ class Fun(commands.Cog, name="Fun", description="Enthält alle Funktionen die zu
         if user is None:
             await ctx.send("Bitte markiere einen User. - .avatar @USER")
         else:
-            embedVar = discord.Embed(title=f"Avatar von {user.name}", color=0x0000CD)
-            embedVar.set_image(url=user.avatar_url)
-            await ctx.send(embed=embedVar)
+            embed = eb.build_embed(f"Avatar von {user.name}", "", 
+                            [],
+                            0x0000CD, None, None, None)
+            embed.set_image(url=user.avatar_url)
+            await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Fun(bot))

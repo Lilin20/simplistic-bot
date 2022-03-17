@@ -30,6 +30,24 @@ class Casino(commands.Cog):
         print("Casino module loaded.")
 
 
+    @commands.command(help="Lässt dich einen Coin flippen.")
+    @commands.cooldown(1, 30, commands.BucketType.user)
+    @commands.has_any_role("Verwalter")
+    async def coinflip(self, ctx, bet):
+        db.database.execute(f"SELECT * FROM userdata WHERE d_id = {ctx.message.author.id}")
+        result = db.database.fetchall()
+        current_money = result[0][7]
+        if current_money < bet:
+            await ctx.send("Du hast nicht genug Geld um ein Spiel 'Coinflip' zu spielen.")
+            return
+        if bet > 250:
+            await ctx.send("Der maximale Einsatz beträgt 250.")
+            return
+        if bet <= 0:
+            await ctx.send("Zu wenig oder gar kein Einsatz eingegeben.")
+            return
+            
+
     @commands.command(help="Lässt dich Roulette spielen mit maximal 4 Feldern.")
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def roulette(self, ctx, bet: int, *args):
