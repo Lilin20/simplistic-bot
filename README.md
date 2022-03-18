@@ -16,7 +16,7 @@ Simplistic wude im Rahmen der Projekttage der TBS1 entwickelt. Simplistic besteh
   + Bearbeitete hauptsächlich die Simplistic-App (siehe anderes Repo).
 
 + Kevin D.
-  + Bearbeitete genauso wie Justing die App (siehe anderes Repo).
+  + Bearbeitete genauso wie Justin die App (siehe anderes Repo).
 
 ## Alle verfügbaren Module
 |Modul   |Beschreibung   |
