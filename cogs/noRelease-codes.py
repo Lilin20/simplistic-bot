@@ -35,7 +35,9 @@ class Cases(commands.Cog):
 
     @commands.command()
     async def redeem(self, ctx, code):
-        db.database.execute(f"SELECT * FROM codes WHERE code = '{code}'")
+        db.database.execute(f"SELECT * FROM codes WHERE code = %(code)s", {
+            "code": code
+        })
         result = db.database.fetchall()
         if len(result) == 0:
             await ctx.send("Dieser Code existiert nicht.")
