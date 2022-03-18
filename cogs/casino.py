@@ -6,14 +6,8 @@ import platform
 import random
 import asyncio
 
-
 def getpath():
-    config_path = None
-    if platform.system() == "Windows":
-        config_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\scripts\\"
-    if platform.system() == "Linux":
-        config_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/scripts"
-    return config_path
+    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts')
 
 sys.path.insert(1, getpath())
 import database as db
@@ -79,7 +73,8 @@ class Casino(commands.Cog):
         betted_fields = args
         winnings = 0
         for field in betted_fields:
-            db.database.execute(f'UPDATE userdata SET money = money - {bet} WHERE d_id = {ctx.message.author.id}')
+            #db.database.execute(f'UPDATE userdata SET money = money - {bet} WHERE d_id = {ctx.message.author.id}')
+            db.database.cursor.execute(F'UPDATE userdata SET money = money - %s WHERE d_id = %s', (bet, ctx.message.author.id))
         for field in betted_fields:
             if int(field) == landed_ball:
                 winnings += (bet * 35)
@@ -141,7 +136,8 @@ class Casino(commands.Cog):
                             0x00ff00, None, None, None)
 
                         await ctx.send(embed=embed)
-                        db.database.execute(f"UPDATE userdata SET money = money + {amount} WHERE d_id = {ctx.message.author.id}")
+                        #db.database.execute(f"UPDATE userdata SET money = money + {amount} WHERE d_id = {ctx.message.author.id}")
+                        db.database.cursor.execute(f'UPDATE userdata SET money = money + %s WHERE d_id = %s', (amount, ctx.message.author.id))
                         return
                     else:
                         embed=eb.build_embed(f"Simplistic - Gamble", f"Higher or Lower", 
@@ -151,7 +147,8 @@ class Casino(commands.Cog):
                             0xFF0000, None, None, None)
 
                         await ctx.send(embed=embed)
-                        db.database.execute(f"UPDATE userdata SET money = money - {amount} WHERE d_id = {ctx.message.author.id}")
+                        #db.database.execute(f"UPDATE userdata SET money = money - {amount} WHERE d_id = {ctx.message.author.id}")
+                        db.database.execute(f'UPDATE userdata SET money = money - %s WHERE d_id = %s', (amount, ctx.message.author.id))
                         return
 
                 if msg.content == "lower" or msg.content == "Lower":
@@ -163,7 +160,8 @@ class Casino(commands.Cog):
                             0x00ff00, None, None, None)
 
                         await ctx.send(embed=embed)
-                        db.database.execute(f"UPDATE userdata SET money = money + {amount} WHERE d_id = {ctx.message.author.id}")
+                        db.database.cursor.execute(f'UPDATE userdata SET money = money + %s WHERE d_id = %s', (amount, ctx.message.author.id))
+                        #db.database.execute(f"UPDATE userdata SET money = money + {amount} WHERE d_id = {ctx.message.author.id}")
                         return
                     else:
                         embed=eb.build_embed(f"Simplistic - Gamble", f"Higher or Lower", 
@@ -173,7 +171,8 @@ class Casino(commands.Cog):
                             0xFF0000, None, None, None)
 
                         await ctx.send(embed=embed)
-                        db.database.execute(f"UPDATE userdata SET money = money - {amount} WHERE d_id = {ctx.message.author.id}")
+                        #db.database.execute(f"UPDATE userdata SET money = money - {amount} WHERE d_id = {ctx.message.author.id}")
+                        db.database.execute(f'UPDATE userdata SET money = money - %s WHERE d_id = %s', (amount, ctx.message.author.id))
                         return
 
     @hol.error

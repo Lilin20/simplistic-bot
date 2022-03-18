@@ -5,14 +5,8 @@ import os
 import platform
 from datetime import date
 
-
 def getpath():
-    config_path = None
-    if platform.system() == "Windows":
-        config_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\scripts\\"
-    if platform.system() == "Linux":
-        config_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/scripts"
-    return config_path
+    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts')
 
 sys.path.insert(1, getpath())
 import database as db

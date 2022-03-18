@@ -7,12 +7,7 @@ import random
 
 
 def getpath():
-    config_path = None
-    if platform.system() == "Windows":
-        config_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\scripts\\"
-    if platform.system() == "Linux":
-        config_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/scripts"
-    return config_path
+    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts')
 
 sys.path.insert(1, getpath())
 import database as db
@@ -35,7 +30,7 @@ class Cases(commands.Cog):
 
     @commands.command()
     async def redeem(self, ctx, code):
-        db.database.execute(f"SELECT * FROM codes WHERE code = '{code}'")
+        db.database.cursor.execute(f"SELECT * FROM codes WHERE code = %s;", (code,))
         result = db.database.fetchall()
         if len(result) == 0:
             await ctx.send("Dieser Code existiert nicht.")
@@ -44,8 +39,8 @@ class Cases(commands.Cog):
                 await ctx.send("Dieser Code ist nicht mehr gültig.")
                 return
             else:
-                db.database.execute(f"UPDATE codes SET uses = uses - 1 WHERE code = '{code}'")
-                db.database.execute(f'UPDATE userdata SET money = money + {result[0][3]} WHERE d_id = {ctx.author.id}')
+                db.database.cursor.execute(f"UPDATE codes SET uses = uses - 1 WHERE code = %s;", (code,))
+                db.database.cursor.execute(f'UPDATE userdata SET money = money + {result[0][3]} WHERE d_id = {ctx.author.id}')
                 await ctx.author.send(f"Der Code wurde erfolgreich eingelöst! Du hast {result[0][3]} Coins erhalten.")
 
 def setup(bot):

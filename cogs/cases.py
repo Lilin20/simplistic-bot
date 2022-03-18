@@ -2,17 +2,11 @@ import discord
 import sys
 from discord.ext import commands
 import os
-import platform
 import random
 
 
 def getpath():
-    config_path = None
-    if platform.system() == "Windows":
-        config_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\scripts\\"
-    if platform.system() == "Linux":
-        config_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/scripts"
-    return config_path
+    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts')
 
 sys.path.insert(1, getpath())
 import database as db
@@ -49,7 +43,7 @@ class Cases(commands.Cog):
     @commands.has_any_role("Klassenmanagement", "Verwalter")
     async def givecase(self, ctx, user:discord.Member, amount:int):
         user_id = user.id
-        db.database.execute(f"UPDATE userdata SET cases = cases + {amount} WHERE d_id = {user_id}")
+        db.database.cursor.execute(f'UPDATE userdata SET cases = cases + %s WHERE d_id = %s', (amount, user_id))
         await ctx.send("Kisten wurden erfolgreich gesendet.")
 
     @commands.command()

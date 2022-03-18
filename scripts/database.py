@@ -36,4 +36,5 @@ class Connector:
         self.cursor.execute(script)
 
 
+
 database = Connector(host, user, password, db)

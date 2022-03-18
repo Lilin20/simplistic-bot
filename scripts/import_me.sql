@@ -105,10 +105,10 @@ INSERT INTO case_items(
 DROP USER IF EXISTS 'bot_db_admin'@'%';
 FLUSH PRIVILEGES;
 
-CREATE USER 'bot_db_admin'@'%' IDENTIFIED BY 'adminSimplistic';
+CREATE USER 'bot_db_admin'@'localhost' IDENTIFIED BY 'adminSimplistic';
 FLUSH PRIVILEGES;
 
-GRANT ALL PRIVILEGES ON bot_db.* TO 'bot_db_admin'@'%' IDENTIFIED BY 'adminSimplistic';
+GRANT ALL PRIVILEGES ON bot_db.* TO 'bot_db_admin'@'localhost' IDENTIFIED BY 'adminSimplistic';
 FLUSH PRIVILEGES;
 
 DROP USER IF EXISTS 'ita19b'@'%';
