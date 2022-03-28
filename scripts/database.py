@@ -4,12 +4,11 @@ import os
 
 
 def getpath():
-    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts')
-
+    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config')
 
 
 c_parser = configparser.ConfigParser()
-c_parser.read(getpath())
+c_parser.read(getpath()+'/config.ini')
 
 host = c_parser.get('Database', 'host')
 user = c_parser.get('Database', 'user')
