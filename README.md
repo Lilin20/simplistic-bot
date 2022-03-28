@@ -81,12 +81,12 @@ Das sieht auf den ersten Blick ziemlich kompliziert aus. Doch nun gucken wir uns
 ```
 def build_embed(title, description, fields, color, footer, thumbnail, author):
 ```
-|Argument|Beschreibung|
-|---|---|
-| title | Titel des Embeds. String |
-| description | Beschreibung des Embeds. String |
-| fields | Felder des Embeds. Array |
-| color | Legt die Farbe des Embeds fest. Integer(hex color) |
-| footer | Text der Fußzeile. String |
-| thumbnail | Thumbnail des Embeds. String(URL) | 
-| author | Beschriftet den Embed mit dem Namen des Authors. discord.Member | 
+|Argument|Beschreibung|Typ|
+|---|---|---|
+| title | Titel des Embeds | String |
+| description | Beschreibung des Embeds | String |
+| fields | Felder des Embeds | Array |
+| color | Legt die Farbe des Embeds fest. | Integer(hex color) |
+| footer | Text der Fußzeile. | String |
+| thumbnail | Thumbnail des Embeds. | String(URL) |
+| author | Beschriftet den Embed mit dem Namen des Authors. | discord.Member |
