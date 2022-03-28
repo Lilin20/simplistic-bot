@@ -2,7 +2,6 @@ import discord
 import sys
 from discord.ext import commands
 import os
-import platform
 
 def getpath():
     return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts')

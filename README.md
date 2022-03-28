@@ -16,7 +16,7 @@ Simplistic wude im Rahmen der Projekttage der TBS1 entwickelt. Simplistic besteh
   + Bearbeitete hauptsächlich die Simplistic-App (siehe anderes Repo).
 
 + Kevin D.
-  + Bearbeitete genauso wie Justing die App (siehe anderes Repo).
+  + Bearbeitete genauso wie Justin die App (siehe anderes Repo).
 
 ## Alle verfügbaren Module
 |Modul   |Beschreibung   |
@@ -40,15 +40,9 @@ import discord
 import sys
 from discord.ext import commands
 import os
-import platform
 
 def getpath():
-    config_path = None
-    if platform.system() == "Windows":
-        config_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\scripts\\"
-    if platform.system() == "Linux":
-        config_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/scripts"
-    return config_path
+    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts')
 
 sys.path.insert(1, getpath())
 import database as db

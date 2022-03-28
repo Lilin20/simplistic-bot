@@ -2,7 +2,6 @@ import discord
 import sys
 from discord.ext import commands
 import os
-import platform
 import random
 
 def getpath():
@@ -66,7 +65,13 @@ class Economy(commands.Cog):
 
             embed = eb.build_embed("Cooldown", " ", [["Achting", f"Du brauchst erstmal eine Pause. Die Arbeit war anstrengend.\nMach mal eine Pause:\n \n {self.leadingZero(minutes)}:{self.leadingZero(seconds)}.", True]], 0xFF0000, None, None, None)
             await ctx.send(embed=embed)
-
+    
+    @commands.command()
+    @commands.has_any_role("Verwalter")
+    async def reset_cd(self, ctx, user: discord.Member):
+        ctx.author = user
+        ctx.message.author = user
+        self.rob.reset_cooldown(ctx)
 
     @commands.command(help="Raubt den gewählten User aus.")
     @commands.cooldown(1, 3600, commands.BucketType.user)

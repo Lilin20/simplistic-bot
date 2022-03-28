@@ -2,7 +2,6 @@ import discord
 import sys
 from discord.ext import commands, tasks
 import os
-import platform
 import random
 import asyncio
 
