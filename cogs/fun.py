@@ -40,7 +40,7 @@ class Fun(commands.Cog, name="Fun", description="Enthält alle Funktionen die zu
 
     @commands.command(help="Gibt ein zufälligs Meme von Reddit aus.")
     async def meme(self, ctx):
-        post = redditeasy.Subreddit(client_id="tdEFqzh4aZ8Gpw", client_secret="_LbOSNTPnUJq6n7KZpfPUllAme-4JQ", user_agent="Anime Module / TBS Bot")
+        post = redditeasy.Subreddit(client_id="INSERT CLIENT ID", client_secret="INSERT CLIENT SECRET", user_agent="Anime Module / TBS Bot")
         output = post.get_post(subreddit="dankmemes")
         formatted_time = datetime.datetime.fromtimestamp(output.created_at).strftime("%d/%m/%Y %I:%M:%S CEST")
     

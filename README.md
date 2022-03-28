@@ -63,3 +63,30 @@ class TestModul(commands.Cog):
 def setup(bot):
     bot.add_cog(TestModul(bot))
 ```
+
+## Der Embed-Builder
+Embeds können oft groß werden und mehrere Zeilen in anspruch nehmen. Deswegen haben wir extra einen Embed-Builder gebaut. Mit unserem Embed-Builder ist es möglich sämtliche Embeds in nur einer Zeile zu schreiben.
+
+So würde ein Embed mit unserem Embed-Builder aussehen (die benutzung des Embed-Builders ist optional).
+
+```
+embed = eb.build_embed(f"Simplistic - Moderation", f"\u200b", 
+      [["Field 1", "Value 1", True],
+      ["Field 2", "Value 1", True],
+      ["Field 3", "Value 1", False]],
+      0x00EE00, None, None, None)
+```
+
+Das sieht auf den ersten Blick ziemlich kompliziert aus. Doch nun gucken wir uns erstmal die Argumente an die übergeben werden müssen.
+```
+def build_embed(title, description, fields, color, footer, thumbnail, author):
+```
+|Argument|Beschreibung|Typ|
+|---|---|---|
+| title | Titel des Embeds | String |
+| description | Beschreibung des Embeds | String |
+| fields | Felder des Embeds | Array |
+| color | Legt die Farbe des Embeds fest. | Integer(hex color) |
+| footer | Text der Fußzeile. | String |
+| thumbnail | Thumbnail des Embeds. | String(URL) |
+| author | Beschriftet den Embed mit dem Namen des Authors. | discord.Member |
